@@ -7,42 +7,45 @@
 
 import SwiftUI
 
-struct UserRow: View {
-    let id: Int
-    let email, login: String
+@Observable class UsersModel {
+    var users = [User]()
     
-    var body: some View {
-        VStack {
-            Text(email)
-            Text(login)
+    func load() async {
+        do {
+            users = try await APIClient.users()
+        } catch {
+            print(error)
         }
     }
 }
 
 struct UsersView: View {
-    @State var users: [User] = []
+    @State var model: UsersModel
     
     var body: some View {
-        VStack {
-            ForEach(users) { user in
-                UserRow(id: user.id, email: user.email, login: user.login)
+        NavigationSplitView {
+            List(model.users) { user in
+                NavigationLink {
+                    UserView(model: .init(), id: user.id)
+                } label: {
+                    UserRow(id: user.id, usualFullName: user.usualFullName, login: user.login, imageURL: user.image?.link)
+                }
             }
-            
+            .navigationTitle("Users")
+        } detail: {
+            Text("Select a user")
         }
-        .padding()
-        .onAppear {
-            users = [
-                .init(id: 12, email: "test@test.fr", login: "mflorent", firstName: "Marcus", lastName: "Florentin"),
-                .init(id: 13, email: "test@test.fr", login: "kacoulib", firstName: "Karim", lastName: "Coulibaly"),
-            ]
+        .onAppear(perform: onAppear)
+    }
+    
+    // MARK: - Actions
+    private func onAppear() {
+        Task {
+            await model.load()
         }
     }
 }
 
 #Preview {
-    UsersView()
-}
-
-#Preview {
-    UserRow(id: 123, email: "test@test.fr", login: "smickael")
+    UsersView(model: .init())
 }

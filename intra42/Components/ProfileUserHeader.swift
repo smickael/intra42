@@ -1,14 +1,13 @@
 //
-//  UserRow.swift
+//  ProfileUserHeader.swift
 //  intra42
 //
-//  Created by Mickaël on 26/03/2024.
+//  Created by Mickaël on 27/03/2024.
 //
 
 import SwiftUI
 
-struct UserRow: View {
-    let id: Int
+struct ProfileUserHeader: View {
     let usualFullName, login: String
     let imageURL: URL?
     
@@ -20,34 +19,32 @@ struct UserRow: View {
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 50, height: 50)
+                        .frame(width: 52, height: 52)
                         .clipShape(Circle())
                 } placeholder: {
                     ProgressView()
                 }
-                .frame(width: 50, height: 50)
+                .frame(width: 52, height: 52)
             } else {
                 Image(systemName: "person.circle.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .foregroundColor(.gray)
-                    .frame(width: 50, height: 50)
+                    .frame(width: 52, height: 52)
             }
             
             VStack(alignment: .leading) {
                 Text(usualFullName)
+                    .font(.system(size: 20, weight: .bold))
                 Text(login)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-            }
+            }.padding(.leading, 8)
             Spacer()
         }
     }
 }
 
 #Preview {
-    VStack {
-        UserRow(id: 123, usualFullName: "Full Name", login: "smickael", imageURL: nil)
-    }
-    
+    ProfileUserHeader(usualFullName: "Karim Coulibaly", login: "kacoulib", imageURL: nil)
 }

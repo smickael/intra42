@@ -6,12 +6,22 @@
 //
 
 import SwiftUI
+let APIClient = API()
 
 @main
 struct intra42App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabView {
+                UsersView(model: .init())
+                    .tabItem {
+                        Label("Received", systemImage: "person.2.fill")
+                    }
+                ProjectsView(model: .init())
+                    .tabItem {
+                        Label("Projects", systemImage: "tray.full.fill")
+                    }
+            }
         }
     }
 }
