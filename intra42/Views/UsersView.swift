@@ -7,14 +7,23 @@
 
 import SwiftUI
 
+enum ContentData<T> {
+    case success(_ data: T)
+    case loading
+    case error(_ error: Error)
+}
+
 @Observable class UsersModel {
-    var users = [User]()
+    var data: ContentData<[User]> = .loading
+    var searchText: String = ""
     
     func load() async {
         do {
-            users = try await APIClient.users()
+            let users = try await APIClient.users(search: searchText.trimmingCharacters(in: .whitespaces).isEmpty ? nil : searchText.trimmingCharacters(in: .whitespaces))
+            data = .success(users)
         } catch {
             print(error)
+            data = .error(error)
         }
     }
 }
@@ -24,22 +33,41 @@ struct UsersView: View {
     
     var body: some View {
         NavigationSplitView {
-            List(model.users) { user in
-                NavigationLink {
-                    UserView(model: .init(), id: user.id)
-                } label: {
-                    UserRow(id: user.id, usualFullName: user.usualFullName, login: user.login, imageURL: user.image?.link)
+            Group {
+                switch model.data {
+                case .loading:
+                    Text("Loading...")
+                case .success(let users):
+                    List(users) { user in
+                        NavigationLink {
+                            UserView(model: .init(), id: user.id)
+                        } label: {
+                            UserRow(id: user.id, usualFullName: user.usualFullName, login: user.login, imageURL: user.image?.link)
+                        }
+                    }
+                case .error( _):
+                    Text("Error")
                 }
-            }
-            .navigationTitle("Users")
+            }.navigationTitle("Users")
         } detail: {
             Text("Select a user")
         }
+        .searchable(text: $model.searchText)
         .onAppear(perform: onAppear)
+        .onChange(of: model.searchText) {
+            search(text: model.searchText)
+        }
     }
     
     // MARK: - Actions
     private func onAppear() {
+        Task {
+            await model.load()
+        }
+    }
+    
+    private func search(text: String) {
+        print("Searching...")
         Task {
             await model.load()
         }

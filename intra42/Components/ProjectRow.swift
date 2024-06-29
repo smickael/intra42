@@ -14,17 +14,55 @@ struct ProjectRow: View {
         HStack {
             Text(project.project.name)
             Spacer()
+            
+            let statusColor = getStatusColor(for: project.status, validated: project.validated)
+            let borderColor = statusColor.darken(by: 0.2)
+            
+            
             Text(project.status.rawValue)
-            if project.status == .finished {
-                Circle()
-                    .foregroundColor(.green)
-                    .frame(width: 10, height: 10)
-            } else if project.status == .inProgress {
-                Circle()
-                    .foregroundColor(.orange)
-                    .frame(width: 10, height: 10)
-            }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 4)
+                .foregroundStyle(.white)
+                .background(statusColor)
+                .cornerRadius(6)
+                .font(.system(size: 10))
+                .fontWeight(.semibold)
+                .textCase(.uppercase)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(borderColor, lineWidth: 2)
+                )
+            Text(project.finalMark != nil ? "\(project.finalMark!)" : "")
+//            Circle()
+//                .foregroundColor(getStatusColor(for: project.status, validated: project.validated))
+//                .frame(width: 10, height: 10)
         }
+    }
+    
+    private func getStatusColor(for status: Status, validated: Bool?) -> Color {
+        switch status {
+        case .finished where validated == true, .success:
+            return .green
+        case .inProgress, .waitingGrading, .waitingCorrection:
+            return .orange
+        case .searchingGroup, .creatingGroup:
+            return .cyan
+        default:
+            return .red
+        }
+    }
+}
+
+extension Color {
+    func darken(by percentage: CGFloat = 0.1) -> Color {
+        let uiColor = UIColor(self)
+        var hue: CGFloat = 0
+        var saturation: CGFloat = 0
+        var brightness: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+        return Color(hue: hue, saturation: saturation, brightness: max(brightness - percentage, 0), opacity: alpha)
     }
 }
 

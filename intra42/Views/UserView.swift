@@ -13,7 +13,6 @@ import SwiftUI
     func load(id: UserDetails.ID) async {
         do {
             user = try await APIClient.user(id: id)
-            print(user)
         } catch {
             print(error)
         }
@@ -23,25 +22,23 @@ import SwiftUI
 struct UserView: View {
     @State var model: UserModel
     let id: UserDetails.ID
-    @State private var selectedCursusIndex = 0
-    
-    
+    @State private var selectedCursusID: Int = 0
     
     var body: some View {
         VStack {
             if let user = model.user {
                 VStack(alignment: .leading) {
-                    ProfileUserHeader(usualFullName: user.usualFullName, login: user.login, imageURL: user.image?.link)
-                    Picker("Cursus", selection: $selectedCursusIndex) {
-                        ForEach(0..<user.cursusUsers.count, id: \.self) { index in
-                            Text(user.cursusUsers[index].cursus.name)
-                                .tag(index)
+                    ProfileUserHeader(usualFullName: user.usualFullName, login: user.login, imageURL: user.image?.link, location: user.location, campus: user.campus)
+                    Picker("Cursus", selection: $selectedCursusID) {
+                        ForEach(user.cursusUsers, id: \.cursus.id) { cursusUser in
+                            Text(cursusUser.cursus.name)
+                                .tag(cursusUser.cursus.id)
                         }
                     }
                     .pickerStyle(.segmented)
                     HStack(alignment: .top) {
                         Spacer()
-                        if let selectedCursusUser = user.cursusUsers[safe: selectedCursusIndex] {
+                        if let selectedCursusUser = user.cursusUsers.first(where: { $0.cursus.id == selectedCursusID }) {
                             VStack {
                                 Text("Level")
                                     .font(.caption2)
@@ -80,18 +77,25 @@ struct UserView: View {
                     }
                     .padding(.top, 16)
                 }.padding()
-                Tabs(options: ["Projects"], optionsContents: [AnyView(UserProjectsList(projects: model.user?.projectsUsers ?? []))])
+                Tabs(options: ["Projects"], optionsContents: [
+                    AnyView(UserProjectsList(projects: model.user?.projectsUsers ?? [], selectedCursusID: selectedCursusID)),
+//                    AnyView()
+                ])
                 Spacer()
-            }
-            else {
+            } else {
                 Text("Loading")
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: onAppear)
     }
+    
     private func onAppear() {
         Task {
             await model.load(id: self.id)
+            if let user = model.user, let firstCursusID = user.cursusUsers.first?.cursus.id {
+                selectedCursusID = firstCursusID
+            }
         }
     }
 }

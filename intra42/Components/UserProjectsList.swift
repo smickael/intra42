@@ -9,11 +9,12 @@ import SwiftUI
 
 struct UserProjectsList: View {
     var projects: [ProjectsUser]
+    let selectedCursusID: Int
     
     var body: some View {
         List {
             Section {
-                ForEach(projects) { project in
+                ForEach(projects.filter { $0.cursusIDS.contains(selectedCursusID) }) { project in
                     ProjectRow(project: project)
                 }
             }
@@ -64,5 +65,5 @@ struct UserProjectsList: View {
             createdAt: "2021-04-03T03:02:29.817Z",
             updatedAt: "2021-04-03T03:02:29.817Z"
         )
-    ])
+    ], selectedCursusID: 0)
 }

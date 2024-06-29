@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - User
-struct User: Codable, Identifiable, Hashable {
+struct User: Codable, Identifiable {
     typealias ID = Int
     let id: ID
     let email, login, firstName, lastName: String
@@ -20,11 +20,11 @@ struct User: Codable, Identifiable, Hashable {
     //    let staff: Bool
     //    let correctionPoint: Int
     //    let poolMonth, poolYear: String
-    //    let location: String?
-    //    let wallet: Int
+        let location: String?
+        let wallet: Int
     //    let anonymizeDate, dataErasureDate, createdAt, updatedAt: String
-    //    let alumnizedAt: String?
     //    let alumni, active: Bool
+    let campus: [Campus]?
     let projectsUsers: [ProjectsUser]?
     
     enum CodingKeys: String, CodingKey {
@@ -39,14 +39,14 @@ struct User: Codable, Identifiable, Hashable {
         //        case correctionPoint = "correction_point"
         //        case poolMonth = "pool_month"
         //        case poolYear = "pool_year"
-        //        case location, wallet
+                case location, wallet
         //        case anonymizeDate = "anonymize_date"
         //        case dataErasureDate = "data_erasure_date"
         //        case createdAt = "created_at"
         //        case updatedAt = "updated_at"
-        //        case alumnizedAt = "alumnized_at"
         //        case alumni = "alumni?"
         //        case active = "active?"
+        case campus
     }
 }
 
@@ -183,11 +183,11 @@ struct UserDetails: Codable, Identifiable, Hashable {
     let correctionPoint: Int
     let poolMonth, poolYear, location: String?
     let wallet: Int
-    let anonymizeDate, dataErasureDate, createdAt, updatedAt: String
-    let alumnizedAt: String?
+    let anonymizeDate, dataErasureDate, createdAt, updatedAt: String?
     let alumni, active: Bool
     let cursusUsers: [CursusUser]
     let projectsUsers: [ProjectsUser]
+    let campus: [Campus]
     
     enum CodingKeys: String, CodingKey {
         case id, email, login
@@ -205,11 +205,11 @@ struct UserDetails: Codable, Identifiable, Hashable {
         case dataErasureDate = "data_erasure_date"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
-        case alumnizedAt = "alumnized_at"
         case alumni = "alumni?"
         case active = "active?"
         case cursusUsers = "cursus_users"
         case projectsUsers = "projects_users"
+        case campus
     }
     
     static func == (lhs: UserDetails, rhs: UserDetails) -> Bool {
@@ -267,8 +267,7 @@ struct UserClass: Codable {
     let correctionPoint: Int
     let poolMonth, poolYear, location: String?
     let wallet: Int
-    let anonymizeDate, dataErasureDate, createdAt, updatedAt: String
-    let alumnizedAt: JSONNull?
+    let anonymizeDate, dataErasureDate, createdAt, updatedAt: String?
     let alumni, active: Bool
 
     enum CodingKeys: String, CodingKey {
@@ -287,7 +286,6 @@ struct UserClass: Codable {
         case dataErasureDate = "data_erasure_date"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
-        case alumnizedAt = "alumnized_at"
         case alumni = "alumni?"
         case active = "active?"
     }
@@ -425,9 +423,16 @@ struct Project: Codable, Equatable, Hashable {
 
 
 enum Status: String, Codable {
+    case success = "success"
     case finished = "finished"
     case inProgress = "in_progress"
+    case searchingGroup = "searching_a_group"
     case parent = "parent"
+    case waitingCorrection = "waiting_for_correction"
+    case validating = "validating"
+    case fail = "fail"
+    case creatingGroup = "creating_group"
+    case waitingGrading = "waiting_for_grading"
 }
 
 // MARK: - TitlesUser

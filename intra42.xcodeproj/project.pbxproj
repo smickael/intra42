@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA615F222C305BA0006F798F /* Campus.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA615F212C305BA0006F798F /* Campus.swift */; };
+		CA615F242C306105006F798F /* CountryFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA615F232C306105006F798F /* CountryFlag.swift */; };
 		CAA2FF532BB86CF400DD9A65 /* ProjectRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA2FF522BB86CF400DD9A65 /* ProjectRow.swift */; };
 		CAB81A3E2BBC0CEE00AFA0C2 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB81A3D2BBC0CEE00AFA0C2 /* Project.swift */; };
 		CAB81A402BBC339500AFA0C2 /* ProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB81A3F2BBC339500AFA0C2 /* ProjectsView.swift */; };
@@ -45,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CA615F212C305BA0006F798F /* Campus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Campus.swift; sourceTree = "<group>"; };
+		CA615F232C306105006F798F /* CountryFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryFlag.swift; sourceTree = "<group>"; };
 		CAA2FF522BB86CF400DD9A65 /* ProjectRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectRow.swift; sourceTree = "<group>"; };
 		CAB81A3D2BBC0CEE00AFA0C2 /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		CAB81A3F2BBC339500AFA0C2 /* ProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsView.swift; sourceTree = "<group>"; };
@@ -157,6 +161,7 @@
 			children = (
 				CAC718DE2B7ED9650072F500 /* User.swift */,
 				CAB81A3D2BBC0CEE00AFA0C2 /* Project.swift */,
+				CA615F212C305BA0006F798F /* Campus.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -180,6 +185,7 @@
 				CAA2FF522BB86CF400DD9A65 /* ProjectRow.swift */,
 				CAB81A412BBD95CC00AFA0C2 /* Tabs.swift */,
 				CAB81A432BBEEB5F00AFA0C2 /* UserProjectsList.swift */,
+				CA615F232C306105006F798F /* CountryFlag.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -321,9 +327,11 @@
 				CAB81A3E2BBC0CEE00AFA0C2 /* Project.swift in Sources */,
 				CAC718B42B7EBE330072F500 /* intra42App.swift in Sources */,
 				CACA93342BB33DE10075EEAE /* API.swift in Sources */,
+				CA615F242C306105006F798F /* CountryFlag.swift in Sources */,
 				CACA933B2BB478A20075EEAE /* ProfileUserHeader.swift in Sources */,
 				CAA2FF532BB86CF400DD9A65 /* ProjectRow.swift in Sources */,
 				CACA93372BB3423A0075EEAE /* UserRow.swift in Sources */,
+				CA615F222C305BA0006F798F /* Campus.swift in Sources */,
 				CAB81A402BBC339500AFA0C2 /* ProjectsView.swift in Sources */,
 				CAC718DF2B7ED9650072F500 /* User.swift in Sources */,
 				CAB81A422BBD95CD00AFA0C2 /* Tabs.swift in Sources */,
