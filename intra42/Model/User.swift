@@ -229,7 +229,7 @@ struct UserImage: Codable, Hashable {
 struct CursusUser: Codable {
     let grade: String?
     let level: Float
-    let skills: [JSONAny]
+    let skills: [Skill]
     let blackholedAt: String?
     let id: Int
     let beginAt: String
@@ -304,7 +304,7 @@ struct Cursus: Codable {
 }
 
 // MARK: - Skill
-struct Skill: Codable {
+struct Skill: Identifiable, Codable {
     let id: Int
     let name: String
     let level: Double

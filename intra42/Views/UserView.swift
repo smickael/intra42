@@ -24,6 +24,14 @@ struct UserView: View {
     let id: UserDetails.ID
     @State private var selectedCursusID: Int = 0
     
+    var selectedCursusSkills: [Skill] {
+           guard let user = model.user,
+                 let selectedCursusUser = user.cursusUsers.first(where: { $0.cursus.id == selectedCursusID }) else {
+               return []
+           }
+           return selectedCursusUser.skills
+       }
+    
     var body: some View {
         VStack {
             if let user = model.user {
@@ -77,9 +85,9 @@ struct UserView: View {
                     }
                     .padding(.top, 16)
                 }.padding()
-                Tabs(options: ["Projects"], optionsContents: [
+                Tabs(options: ["Projects", "Skills"], optionsContents: [
                     AnyView(UserProjectsList(projects: model.user?.projectsUsers ?? [], selectedCursusID: selectedCursusID)),
-//                    AnyView()
+                    AnyView(SkillsChart(skills: selectedCursusSkills))
                 ])
                 Spacer()
             } else {

@@ -33,9 +33,6 @@ struct ProjectRow: View {
                         .stroke(borderColor, lineWidth: 2)
                 )
             Text(project.finalMark != nil ? "\(project.finalMark!)" : "")
-//            Circle()
-//                .foregroundColor(getStatusColor(for: project.status, validated: project.validated))
-//                .frame(width: 10, height: 10)
         }
     }
     
