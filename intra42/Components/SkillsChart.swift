@@ -19,10 +19,10 @@ struct SkillsChart: View {
                         BarMark(
                             x: .value("Level", skill.level),
                             y: .value("Skill", skill.name),
-                            width: .fixed(30)
+                            width: .fixed(20)
                         )
                         .foregroundStyle(.gray)
-                        .cornerRadius(10)
+                        .cornerRadius(8)
                         .annotation(position: .top) {
                             Text("\(skill.level, specifier: "%.2f")")
                                 .font(.caption)
@@ -47,14 +47,9 @@ struct SkillsChart: View {
                         }
                     }
                 }
-                .chartXAxis {
-                    AxisMarks() { value in
-                        AxisValueLabel()
-                    }
-                }
             }
             .padding(.horizontal, 16)
-            .frame(height: CGFloat(skills.count) * 120)
+            .frame(height: CGFloat(skills.count) * 100)
             Spacer()
         }
     }
