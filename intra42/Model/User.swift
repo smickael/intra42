@@ -92,12 +92,13 @@ struct Campus: Codable {
     let id: Int
     let name, timeZone: String
     let language: Language
-    let usersCount, vogsphereID: Int
+    let usersCount: Int
+    let vogsphereID: Int?
     let country, address, zip, city: String
     let website: String
     let facebook, twitter: String
     let active, campusPublic: Bool
-    let emailExtension: String
+    let emailExtension: String?
     let defaultHiddenPhone: Bool
 
     enum CodingKeys: String, CodingKey {
@@ -116,8 +117,8 @@ struct Campus: Codable {
 // MARK: - Language
 struct Language: Codable {
     let id: Int
-    let name: LanguageName
-    let identifier: Identifier
+    let name: String
+    let identifier: String
     let createdAt: String
     let updatedAt: String
 
@@ -126,32 +127,6 @@ struct Language: Codable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
-}
-
-enum Identifier: String, Codable {
-    case en = "en"
-    case es = "es"
-    case fr = "fr"
-    case it = "it"
-    case ja = "ja"
-    case ko = "ko"
-    case pt = "pt"
-    case ptBr = "pt_br"
-    case ru = "ru"
-    case tr = "tr"
-}
-
-enum LanguageName: String, Codable {
-    case brazilianPortuguese = "Brazilian Portuguese"
-    case english = "English"
-    case français = "Français"
-    case italian = "Italian"
-    case japanese = "Japanese"
-    case korean = "Korean"
-    case portuguese = "Portuguese"
-    case russian = "Russian"
-    case spanish = "Spanish"
-    case turkish = "Turkish"
 }
 
 // MARK: - CampusUser
@@ -433,6 +408,7 @@ enum Status: String, Codable {
     case fail = "fail"
     case creatingGroup = "creating_group"
     case waitingGrading = "waiting_for_grading"
+    case waitingStart = "waiting_to_start"
 }
 
 // MARK: - TitlesUser

@@ -37,7 +37,7 @@ class API {
             let expires_in: Int
         }
         
-        let tokenURL = URL(string: "/oauth/token?grant_type=client_credentials&client_id=u-s4t2ud-8f0aa2a7726a169bbd4b24d2c0761d0419f8b364b0599730712422e2c4aaf9b4&client_secret=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", relativeTo: baseURL)!
+        let tokenURL = URL(string: "/oauth/token?grant_type=client_credentials&client_id=u-s4t2ud-8f0aa2a7726a169bbd4b24d2c0761d0419f8b364b0599730712422e2c4aaf9b4&client_secret=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", relativeTo: baseURL)!
         
         
         var request = URLRequest(url: tokenURL)
@@ -66,16 +66,11 @@ class API {
             components.queryItems?.append(.init(name: "range[login]", value: "\(min),\(max)"))
         }
         
-//        let usersURL = URL(string: "/v2/users", relativeTo: baseURL)!
-        
-//        let userURL = URL(string: "/v2/users/?range%5Blogin%5D=smi,smiz", relativeTo: baseURL)!
-        
         let url = components.url(relativeTo: baseURL)!
         var userRequest = URLRequest(url: url)
                 userRequest.setValue("Bearer \(try await getToken())", forHTTPHeaderField: "Authorization")
         
         let (userData, response) = try await session.data(for: userRequest)
-//        print(response)
         guard let httpResponse = response as? HTTPURLResponse, (200..<300).contains(httpResponse.statusCode) else {
             throw try JSONDecoder().decode(API.ResponseError.self, from: userData)
         }
@@ -114,7 +109,7 @@ class API {
     
     func projects() async throws -> [ProjectDetails] {
         
-        let projectsURL = URL(string: "/v2/projects", relativeTo: baseURL)!
+        let projectsURL = URL(string: "/v2/projects?page%5Bsize%5D=200", relativeTo: baseURL)!
         
         var projectRequest = URLRequest(url: projectsURL)
         projectRequest.setValue("Bearer \(try await getToken())", forHTTPHeaderField: "Authorization")
@@ -124,5 +119,32 @@ class API {
         let projects = try JSONDecoder().decode([ProjectDetails].self, from: projectData)
         
         return projects
+    }
+    
+    func offers() async throws -> [Offer] {
+        
+        let offersURL = URL(string: "/v2/offers", relativeTo: baseURL)!
+        
+        var offersRequest = URLRequest(url: offersURL)
+        offersRequest.setValue("Bearer \(try await getToken())", forHTTPHeaderField: "Authorization")
+        
+        let (offersData, _) = try await session.data(for: offersRequest)
+        
+        let offers = try JSONDecoder().decode([Offer].self, from: offersData)
+        
+        return offers
+    }
+    
+    func offer(id: Offer.ID) async throws -> Offer {
+        let offerURL = URL(string: "/v2/offers/\(id)", relativeTo: baseURL)!
+        
+        var offerRequest = URLRequest(url: offerURL)
+        offerRequest.setValue("Bearer \(try await getToken())", forHTTPHeaderField: "Authorization")
+        
+        let (offerData, _) = try await session.data(for: offerRequest)
+        
+        let offer = try JSONDecoder().decode(Offer.self, from: offerData)
+        
+        return offer
     }
 }

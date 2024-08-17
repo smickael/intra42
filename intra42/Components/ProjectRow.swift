@@ -42,7 +42,7 @@ struct ProjectRow: View {
             return .green
         case .inProgress, .waitingGrading, .waitingCorrection:
             return .orange
-        case .searchingGroup, .creatingGroup:
+        case .searchingGroup, .creatingGroup, .waitingStart, .parent:
             return .cyan
         default:
             return .red

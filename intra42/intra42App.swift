@@ -15,11 +15,16 @@ struct intra42App: App {
             TabView {
                 UsersView(model: .init())
                     .tabItem {
-                        Label("Received", systemImage: "person.2.fill")
+                        Label("Search Profiles", systemImage: "person.2.fill")
                     }
                 ProjectsView(model: .init())
                     .tabItem {
                         Label("Projects", systemImage: "tray.full.fill")
+                    }
+                OffersView(model: .init())
+                    .tabItem {
+                        Label("Companies", systemImage:
+                            "case.fill")
                     }
             }
         }
