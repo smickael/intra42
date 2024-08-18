@@ -234,7 +234,7 @@ struct UserClass: Codable {
     let id: Int
     let email, login, firstName, lastName: String
     let usualFullName: String
-    let usualFirstName: JSONNull?
+    let usualFirstName: String?
     let url: String
     let phone, displayname, kind: String
     let image: UserImage?

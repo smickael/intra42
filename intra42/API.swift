@@ -58,10 +58,11 @@ class API {
         var components = URLComponents(string: "v2/users")!
         
         components.queryItems = .init()
-        
+        components.queryItems?.append(.init(name: "sort", value: "login"))
+                                      
         if let search {
-            let min = search.dropLast(1)
-            let max = search + "z"
+            let min = search
+            let max = search + "zzz"
 
             components.queryItems?.append(.init(name: "range[login]", value: "\(min),\(max)"))
         }

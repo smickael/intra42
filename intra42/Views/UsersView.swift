@@ -19,7 +19,7 @@ enum ContentData<T> {
     
     func load() async {
         do {
-            let users = try await APIClient.users(search: searchText.trimmingCharacters(in: .whitespaces).isEmpty ? nil : searchText.trimmingCharacters(in: .whitespaces))
+            let users = try await APIClient.users(search: searchText.trimmingCharacters(in: .whitespaces).isEmpty ? nil : searchText.trimmingCharacters(in: .whitespaces).lowercased(with: .autoupdatingCurrent))
             data = .success(users)
         } catch {
             print(error)
@@ -36,7 +36,7 @@ struct UsersView: View {
             Group {
                 switch model.data {
                 case .loading:
-                    Text("Loading...")
+                    Spinner()
                 case .success(let users):
                     List(users) { user in
                         NavigationLink {
@@ -46,7 +46,15 @@ struct UsersView: View {
                         }
                     }
                 case .error( _):
-                    Text("Error")
+                    Group {
+                        Text("You're too fast for me!")
+                            .font(.headline)
+                        Text("By default, this app has limited\n to 2 requests/second")
+                            .font(.subheadline)
+                            .monospaced()
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
                 }
             }.navigationTitle("Users")
         } detail: {

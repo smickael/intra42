@@ -14,7 +14,7 @@ import SwiftUI
         do {
             user = try await APIClient.user(id: id)
         } catch {
-            print(error)
+            print("ERROR UserView", error)
         }
     }
 }
@@ -23,6 +23,10 @@ struct UserView: View {
     @State var model: UserModel
     let id: UserDetails.ID
     @State private var selectedCursusID: Int = 0
+    
+    var selectedCursusName: String {
+            model.user?.cursusUsers.first(where: { $0.cursus.id == selectedCursusID })?.cursus.name ?? "Unknown"
+        }
     
     var selectedCursusSkills: [Skill] {
            guard let user = model.user,
@@ -44,6 +48,11 @@ struct UserView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    Text(selectedCursusName)
+                        .font(.headline)
+                        .padding(.vertical, 4)
+                        .fontDesign(.monospaced)
+                        .frame(maxWidth: .infinity, alignment: .center)
                     HStack(alignment: .top) {
                         Spacer()
                         if let selectedCursusUser = user.cursusUsers.first(where: { $0.cursus.id == selectedCursusID }) {
@@ -91,7 +100,7 @@ struct UserView: View {
                 ])
                 Spacer()
             } else {
-                Text("Loading")
+                Spinner()
             }
         }
         .navigationBarTitleDisplayMode(.inline)

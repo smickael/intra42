@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA4890BD2C7236A800599111 /* Spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4890BC2C7236A800599111 /* Spinner.swift */; };
 		CA596F2C2C358C66002B0C85 /* OfferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA596F2B2C358C66002B0C85 /* OfferView.swift */; };
 		CA615F222C305BA0006F798F /* Campus.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA615F212C305BA0006F798F /* Campus.swift */; };
 		CA615F242C306105006F798F /* CountryFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA615F232C306105006F798F /* CountryFlag.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CA4890BC2C7236A800599111 /* Spinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spinner.swift; sourceTree = "<group>"; };
 		CA596F2B2C358C66002B0C85 /* OfferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferView.swift; sourceTree = "<group>"; };
 		CA615F212C305BA0006F798F /* Campus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Campus.swift; sourceTree = "<group>"; };
 		CA615F232C306105006F798F /* CountryFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryFlag.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				CA615F232C306105006F798F /* CountryFlag.swift */,
 				CA615F252C3076B7006F798F /* SkillsChart.swift */,
 				CAA372DD2C3456F9007E28A5 /* OfferRow.swift */,
+				CA4890BC2C7236A800599111 /* Spinner.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				CAB81A3E2BBC0CEE00AFA0C2 /* Project.swift in Sources */,
 				CAC718B42B7EBE330072F500 /* intra42App.swift in Sources */,
 				CACA93342BB33DE10075EEAE /* API.swift in Sources */,
+				CA4890BD2C7236A800599111 /* Spinner.swift in Sources */,
 				CA615F242C306105006F798F /* CountryFlag.swift in Sources */,
 				CACA933B2BB478A20075EEAE /* ProfileUserHeader.swift in Sources */,
 				CAA2FF532BB86CF400DD9A65 /* ProjectRow.swift in Sources */,

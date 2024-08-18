@@ -7,15 +7,22 @@
 
 import SwiftUI
 
+enum ContentProject<T> {
+    case success(_ data: T)
+    case loading
+    case error(_ error: Error)
+}
+
 @Observable class ProjectsModel {
-    var projects = [ProjectDetails]()
+    var data: ContentProject<[ProjectDetails]> = .loading
     
     func load() async {
         do {
-            projects = try await APIClient.projects()
-            print(projects)
+            let projects = try await APIClient.projects()
+            data = .success(projects)
         } catch {
             print(error)
+            data = .error(error)
         }
     }
 }
@@ -25,9 +32,26 @@ struct ProjectsView: View {
     
     var body: some View {
         NavigationView {
-            List(model.projects) { project in
-                HStack {
-                    Text(project.name)
+            Group {
+                switch model.data {
+                case .loading:
+                    Spinner()
+                case .success(let projects):
+                    List(projects) { project in
+                        HStack {
+                            Text(project.name)
+                        }
+                    }
+                case .error( _):
+                    Group {
+                        Text("You're too fast for me!")
+                            .font(.headline)
+                        Text("By default, this app has limited\n to 2 requests/second")
+                            .font(.subheadline)
+                            .monospaced()
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
                 }
             }
             .navigationTitle("Projects")

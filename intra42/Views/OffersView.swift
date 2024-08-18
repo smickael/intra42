@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 @Observable class OffersModel {
     var data: ContentData<[Offer]> = .loading
     
@@ -31,7 +30,7 @@ struct OffersView: View {
             Group {
                 switch model.data {
                 case .loading:
-                    Text("Loading...")
+                    Spinner()
                 case .success(let offers):
                     List(offers) { offer in
                         NavigationLink {
@@ -41,7 +40,15 @@ struct OffersView: View {
                         }
                     }
                 case .error( _):
-                    Text("Error")
+                    Group {
+                        Text("You're too fast for me!")
+                            .font(.headline)
+                        Text("By default, this app has limited\n to 2 requests/second")
+                            .font(.subheadline)
+                            .monospaced()
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
                 }
             }.navigationTitle("Companies")
         } detail: {
