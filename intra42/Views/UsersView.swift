@@ -18,11 +18,34 @@ enum ContentData<T> {
     var searchText: String = ""
     
     func load() async {
+        let trimmedSearchText = searchText.trimmingCharacters(in: .whitespaces).lowercased(with: .autoupdatingCurrent)
+        
+        if trimmedSearchText.isEmpty {
+            // If the search text is empty, return an empty list
+            data = .success([])
+            return
+        }
+        
         do {
-            let users = try await APIClient.users(search: searchText.trimmingCharacters(in: .whitespaces).isEmpty ? nil : searchText.trimmingCharacters(in: .whitespaces).lowercased(with: .autoupdatingCurrent))
+            let users = try await APIClient.users(search: trimmedSearchText)
             data = .success(users)
         } catch {
-            print(error)
+            if let decodingError = error as? DecodingError {
+                print("Decoding error: \(decodingError)")
+            } else {
+                print("Unexpected error: \(error)")
+            }
+            
+            // Handle non-JSON responses here
+            if let urlError = error as? URLError, urlError.code == .cannotParseResponse {
+                print("The server returned an unexpected response. It may not be in JSON format.")
+            } else {
+                // Attempt to check if the data is invalid JSON
+                if let errorData = (error as NSError).userInfo[NSDebugDescriptionErrorKey] as? String {
+                    print("Received invalid JSON data: \(errorData)")
+                }
+            }
+            
             data = .error(error)
         }
     }
@@ -38,11 +61,15 @@ struct UsersView: View {
                 case .loading:
                     Spinner()
                 case .success(let users):
-                    List(users) { user in
-                        NavigationLink {
-                            UserView(model: .init(), id: user.id)
-                        } label: {
-                            UserRow(id: user.id, usualFullName: user.usualFullName, login: user.login, imageURL: user.image?.link)
+                    if users.isEmpty && model.searchText.isEmpty {
+                        logoView()
+                    } else {
+                        List(users) { user in
+                            NavigationLink {
+                                UserView(model: .init(), id: user.id)
+                            } label: {
+                                UserRow(id: user.id, usualFullName: user.usualFullName, login: user.login, imageURL: user.image?.link)
+                            }
                         }
                     }
                 case .error( _):
@@ -79,6 +106,16 @@ struct UsersView: View {
         Task {
             await model.load()
         }
+    }
+    
+    // MARK: - Logo View for Empty List
+    @ViewBuilder
+    private func logoView() -> some View {
+        Image("42_logo")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 150, height: 150)
+            .padding()
     }
 }
 

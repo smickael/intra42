@@ -7,6 +7,8 @@
 
 import Foundation
 
+import Foundation
+
 class API {
     private struct Auth {
         let token: String
@@ -59,17 +61,17 @@ class API {
         
         components.queryItems = .init()
         components.queryItems?.append(.init(name: "sort", value: "login"))
-                                      
+        
         if let search {
             let min = search
             let max = search + "zzz"
-
+            
             components.queryItems?.append(.init(name: "range[login]", value: "\(min),\(max)"))
         }
         
         let url = components.url(relativeTo: baseURL)!
         var userRequest = URLRequest(url: url)
-                userRequest.setValue("Bearer \(try await getToken())", forHTTPHeaderField: "Authorization")
+        userRequest.setValue("Bearer \(try await getToken())", forHTTPHeaderField: "Authorization")
         
         let (userData, response) = try await session.data(for: userRequest)
         guard let httpResponse = response as? HTTPURLResponse, (200..<300).contains(httpResponse.statusCode) else {

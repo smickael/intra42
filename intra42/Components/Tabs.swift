@@ -37,7 +37,7 @@ struct Tabs: View {
                             
                             if selectedOption == index {
                                 Rectangle().fill(Color.primary)
-                                    .frame(height: 1)
+                                    .frame(height: 3)
                                     .matchedGeometryEffect(id: "option\(index)", in: underline)
                             }
                         }
