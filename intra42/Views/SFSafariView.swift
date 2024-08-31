@@ -12,13 +12,13 @@ struct SFSafariView: UIViewControllerRepresentable {
     
     let url: URL
     fileprivate let delegate = SFDelegate()
-
+    
     func makeUIViewController(context: UIViewControllerRepresentableContext<Self>) -> SFSafariViewController {
         let viewController: SFSafariViewController = SFSafariViewController(url: url)
         viewController.delegate = delegate
         return viewController
     }
-
+    
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SFSafariView>) {
     }
 }

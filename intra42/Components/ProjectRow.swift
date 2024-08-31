@@ -38,14 +38,14 @@ struct ProjectRow: View {
     
     private func getStatusColor(for status: Status, validated: Bool?) -> Color {
         switch status {
-        case .finished where validated == true, .success:
-            return .green
-        case .inProgress, .waitingGrading, .waitingCorrection:
-            return .orange
-        case .searchingGroup, .creatingGroup, .waitingStart, .parent:
-            return .cyan
-        default:
-            return .red
+            case .finished where validated == true, .success:
+                return .green
+            case .inProgress, .waitingGrading, .waitingCorrection:
+                return .orange
+            case .searchingGroup, .creatingGroup, .waitingStart, .parent:
+                return .cyan
+            default:
+                return .red
         }
     }
 }

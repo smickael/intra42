@@ -23,7 +23,7 @@ struct Offer: Identifiable, Codable {
     let proID: Int?
     let companyID: Int
     let target: Target
-
+    
     enum CodingKeys: String, CodingKey {
         case id, title
         case littleDescription = "little_description"

@@ -31,22 +31,6 @@ enum ContentData<T> {
             let users = try await APIClient.users(search: trimmedSearchText)
             data = .success(users)
         } catch {
-            if let decodingError = error as? DecodingError {
-                print("Decoding error: \(decodingError)")
-            } else {
-                print("Unexpected error: \(error)")
-            }
-            
-            // Handle non-JSON responses here
-            if let urlError = error as? URLError, urlError.code == .cannotParseResponse {
-                print("The server returned an unexpected response. It may not be in JSON format.")
-            } else {
-                // Attempt to check if the data is invalid JSON
-                if let errorData = (error as NSError).userInfo[NSDebugDescriptionErrorKey] as? String {
-                    print("Received invalid JSON data: \(errorData)")
-                }
-            }
-            
             data = .error(error)
         }
     }

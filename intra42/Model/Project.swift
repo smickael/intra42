@@ -11,30 +11,30 @@ import Foundation
 struct ProjectDetails: Identifiable, Codable {
     typealias ID = Int
     let id: Int
-        let name, slug: String
-        let difficulty: Int?
-        let parent: Child?
-        let children: [Child]
-        let attachments: [JSONAny]
-        let createdAt, updatedAt: String
-        let exam: Bool
-        let gitID: Int?
-        let repository: String?
-        let cursus: [Cursus]
-        let campus: [Campus]
-        let videos: [JSONAny]
-        let projectSessions: [ProjectSession]
-
-        enum CodingKeys: String, CodingKey {
-            case id, name, slug, difficulty, parent, children, attachments
-            case createdAt = "created_at"
-            case updatedAt = "updated_at"
-            case exam
-            case gitID = "git_id"
-            case repository, cursus, campus, videos
-            case projectSessions = "project_sessions"
-        }
+    let name, slug: String
+    let difficulty: Int?
+    let parent: Child?
+    let children: [Child]
+    let attachments: [JSONAny]
+    let createdAt, updatedAt: String
+    let exam: Bool
+    let gitID: Int?
+    let repository: String?
+    let cursus: [Cursus]
+    let campus: [Campus]
+    let videos: [JSONAny]
+    let projectSessions: [ProjectSession]
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name, slug, difficulty, parent, children, attachments
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+        case exam
+        case gitID = "git_id"
+        case repository, cursus, campus, videos
+        case projectSessions = "project_sessions"
     }
+}
 
 // MARK: - Campus
 struct ProjectCampus: Codable {
@@ -49,7 +49,7 @@ struct ProjectCampus: Codable {
     let active, campusPublic: Bool
     let emailExtension: String?
     let defaultHiddenPhone: Bool
-
+    
     enum CodingKeys: String, CodingKey {
         case id, name
         case timeZone = "time_zone"
@@ -75,7 +75,7 @@ struct Child: Codable {
 struct ProjectCursus: Codable {
     let id: Int
     let name, slug, kind: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case name, slug, kind
@@ -101,7 +101,7 @@ struct ProjectSession: Codable {
     let scales: [Scale]
     let uploads: [JSONAny]
     let commit: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case id, solo
         case beginAt = "begin_at"
@@ -126,7 +126,7 @@ struct ProjectSession: Codable {
 struct Scale: Codable {
     let id, correctionNumber: Int
     let isPrimary: Bool
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case correctionNumber = "correction_number"

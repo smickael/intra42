@@ -29,26 +29,26 @@ struct OffersView: View {
         NavigationSplitView {
             Group {
                 switch model.data {
-                case .loading:
-                    Spinner()
-                case .success(let offers):
-                    List(offers) { offer in
-                        NavigationLink {
-                            OfferView(model: .init(), id: offer.id)
-                        } label: {
-                            OfferRow(id: offer.id, title: offer.title, littleDescription: offer.littleDescription, contractType: offer.contractType, validAt: offer.validAt)
+                    case .loading:
+                        Spinner()
+                    case .success(let offers):
+                        List(offers) { offer in
+                            NavigationLink {
+                                OfferView(model: .init(), id: offer.id)
+                            } label: {
+                                OfferRow(id: offer.id, title: offer.title, littleDescription: offer.littleDescription, contractType: offer.contractType, validAt: offer.validAt)
+                            }
                         }
-                    }
-                case .error( _):
-                    Group {
-                        Text("You're too fast for me!")
-                            .font(.headline)
-                        Text("By default, this app has limited\n to 2 requests/second")
-                            .font(.subheadline)
-                            .monospaced()
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding()
+                    case .error( _):
+                        Group {
+                            Text("You're too fast for me!")
+                                .font(.headline)
+                            Text("By default, this app has limited\n to 2 requests/second")
+                                .font(.subheadline)
+                                .monospaced()
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding()
                 }
             }.navigationTitle("Companies")
         } detail: {

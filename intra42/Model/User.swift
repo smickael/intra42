@@ -20,8 +20,8 @@ struct User: Codable, Identifiable {
     //    let staff: Bool
     //    let correctionPoint: Int
     //    let poolMonth, poolYear: String
-        let location: String?
-        let wallet: Int
+    let location: String?
+    let wallet: Int
     //    let anonymizeDate, dataErasureDate, createdAt, updatedAt: String
     //    let alumni, active: Bool
     let campus: [Campus]?
@@ -39,7 +39,7 @@ struct User: Codable, Identifiable {
         //        case correctionPoint = "correction_point"
         //        case poolMonth = "pool_month"
         //        case poolYear = "pool_year"
-                case location, wallet
+        case location, wallet
         //        case anonymizeDate = "anonymize_date"
         //        case dataErasureDate = "data_erasure_date"
         //        case createdAt = "created_at"
@@ -66,7 +66,7 @@ struct Achievement: Codable {
     let image: String
     let nbrOfSuccess: Int?
     let usersURL: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id, name, description, tier, kind, visible, image
         case nbrOfSuccess = "nbr_of_success"
@@ -100,7 +100,7 @@ struct Campus: Codable {
     let active, campusPublic: Bool
     let emailExtension: String?
     let defaultHiddenPhone: Bool
-
+    
     enum CodingKeys: String, CodingKey {
         case id, name
         case timeZone = "time_zone"
@@ -121,7 +121,7 @@ struct Language: Codable {
     let identifier: String
     let createdAt: String
     let updatedAt: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id, name, identifier
         case createdAt = "created_at"
@@ -134,7 +134,7 @@ struct CampusUser: Codable {
     let id, userID, campusID: Int
     let isPrimary: Bool
     let createdAt, updatedAt: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case userID = "user_id"
@@ -214,7 +214,7 @@ struct CursusUser: Codable {
     let createdAt, updatedAt: String
     let user: UserClass
     let cursus: Cursus
-
+    
     enum CodingKeys: String, CodingKey {
         case grade, level, skills
         case blackholedAt = "blackholed_at"
@@ -244,7 +244,7 @@ struct UserClass: Codable {
     let wallet: Int
     let anonymizeDate, dataErasureDate, createdAt, updatedAt: String?
     let alumni, active: Bool
-
+    
     enum CodingKeys: String, CodingKey {
         case id, email, login
         case firstName = "first_name"
@@ -270,7 +270,7 @@ struct UserClass: Codable {
 struct Cursus: Codable {
     let id: Int
     let createdAt, name, slug, kind: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case createdAt = "created_at"
@@ -295,7 +295,7 @@ struct Skill: Identifiable, Codable {
 struct LanguagesUser: Codable {
     let id, languageID, userID, position: Int
     let createdAt: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case languageID = "language_id"
@@ -320,7 +320,7 @@ struct ProjectsUser: Identifiable, Codable, Equatable, Hashable {
     let marked: Bool
     let retriableAt: String?
     let createdAt, updatedAt: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id, occurrence
         case finalMark = "final_mark"
@@ -335,23 +335,23 @@ struct ProjectsUser: Identifiable, Codable, Equatable, Hashable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
-
+    
     static func == (lhs: ProjectsUser, rhs: ProjectsUser) -> Bool {
         return lhs.id == rhs.id &&
-            lhs.occurrence == rhs.occurrence &&
-            lhs.finalMark == rhs.finalMark &&
-            lhs.status == rhs.status &&
-            lhs.validated == rhs.validated &&
-            lhs.currentTeamID == rhs.currentTeamID &&
-            lhs.project == rhs.project &&
-            lhs.cursusIDS == rhs.cursusIDS &&
-            lhs.markedAt == rhs.markedAt &&
-            lhs.marked == rhs.marked &&
-            lhs.retriableAt == rhs.retriableAt &&
-            lhs.createdAt == rhs.createdAt &&
-            lhs.updatedAt == rhs.updatedAt
+        lhs.occurrence == rhs.occurrence &&
+        lhs.finalMark == rhs.finalMark &&
+        lhs.status == rhs.status &&
+        lhs.validated == rhs.validated &&
+        lhs.currentTeamID == rhs.currentTeamID &&
+        lhs.project == rhs.project &&
+        lhs.cursusIDS == rhs.cursusIDS &&
+        lhs.markedAt == rhs.markedAt &&
+        lhs.marked == rhs.marked &&
+        lhs.retriableAt == rhs.retriableAt &&
+        lhs.createdAt == rhs.createdAt &&
+        lhs.updatedAt == rhs.updatedAt
     }
-
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(occurrence)
@@ -375,19 +375,19 @@ struct Project: Codable, Equatable, Hashable {
     let id: Int
     let name, slug: String
     let parentID: Int?
-
+    
     enum CodingKeys: String, CodingKey {
         case id, name, slug
         case parentID = "parent_id"
     }
-
+    
     static func == (lhs: Project, rhs: Project) -> Bool {
         return lhs.id == rhs.id &&
-            lhs.name == rhs.name &&
-            lhs.slug == rhs.slug &&
-            lhs.parentID == rhs.parentID
+        lhs.name == rhs.name &&
+        lhs.slug == rhs.slug &&
+        lhs.parentID == rhs.parentID
     }
-
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(name)
@@ -416,7 +416,7 @@ struct TitlesUser: Codable {
     let id, userID, titleID: Int
     let selected: Bool
     let createdAt, updatedAt: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case userID = "user_id"
@@ -430,28 +430,28 @@ struct TitlesUser: Codable {
 // MARK: - Encode/decode helpers
 
 class JSONNull: Codable, Hashable {
-
+    
     public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
         return true
     }
-
+    
     public var hashValue: Int {
         return 0
     }
-
+    
     public func hash(into hasher: inout Hasher) {
         // No-op
     }
-
+    
     public init() {}
-
+    
     public required init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if !container.decodeNil() {
             throw DecodingError.typeMismatch(JSONNull.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for JSONNull"))
         }
     }
-
+    
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encodeNil()
@@ -460,38 +460,38 @@ class JSONNull: Codable, Hashable {
 
 class JSONCodingKey: CodingKey {
     let key: String
-
+    
     required init?(intValue: Int) {
         return nil
     }
-
+    
     required init?(stringValue: String) {
         key = stringValue
     }
-
+    
     var intValue: Int? {
         return nil
     }
-
+    
     var stringValue: String {
         return key
     }
 }
 
 class JSONAny: Codable {
-
+    
     let value: Any
-
+    
     static func decodingError(forCodingPath codingPath: [CodingKey]) -> DecodingError {
         let context = DecodingError.Context(codingPath: codingPath, debugDescription: "Cannot decode JSONAny")
         return DecodingError.typeMismatch(JSONAny.self, context)
     }
-
+    
     static func encodingError(forValue value: Any, codingPath: [CodingKey]) -> EncodingError {
         let context = EncodingError.Context(codingPath: codingPath, debugDescription: "Cannot encode JSONAny")
         return EncodingError.invalidValue(value, context)
     }
-
+    
     static func decode(from container: SingleValueDecodingContainer) throws -> Any {
         if let value = try? container.decode(Bool.self) {
             return value
@@ -510,7 +510,7 @@ class JSONAny: Codable {
         }
         throw decodingError(forCodingPath: container.codingPath)
     }
-
+    
     static func decode(from container: inout UnkeyedDecodingContainer) throws -> Any {
         if let value = try? container.decode(Bool.self) {
             return value
@@ -537,7 +537,7 @@ class JSONAny: Codable {
         }
         throw decodingError(forCodingPath: container.codingPath)
     }
-
+    
     static func decode(from container: inout KeyedDecodingContainer<JSONCodingKey>, forKey key: JSONCodingKey) throws -> Any {
         if let value = try? container.decode(Bool.self, forKey: key) {
             return value
@@ -564,7 +564,7 @@ class JSONAny: Codable {
         }
         throw decodingError(forCodingPath: container.codingPath)
     }
-
+    
     static func decodeArray(from container: inout UnkeyedDecodingContainer) throws -> [Any] {
         var arr: [Any] = []
         while !container.isAtEnd {
@@ -573,7 +573,7 @@ class JSONAny: Codable {
         }
         return arr
     }
-
+    
     static func decodeDictionary(from container: inout KeyedDecodingContainer<JSONCodingKey>) throws -> [String: Any] {
         var dict = [String: Any]()
         for key in container.allKeys {
@@ -582,7 +582,7 @@ class JSONAny: Codable {
         }
         return dict
     }
-
+    
     static func encode(to container: inout UnkeyedEncodingContainer, array: [Any]) throws {
         for value in array {
             if let value = value as? Bool {
@@ -606,7 +606,7 @@ class JSONAny: Codable {
             }
         }
     }
-
+    
     static func encode(to container: inout KeyedEncodingContainer<JSONCodingKey>, dictionary: [String: Any]) throws {
         for (key, value) in dictionary {
             let key = JSONCodingKey(stringValue: key)!
@@ -631,7 +631,7 @@ class JSONAny: Codable {
             }
         }
     }
-
+    
     static func encode(to container: inout SingleValueEncodingContainer, value: Any) throws {
         if let value = value as? Bool {
             try container.encode(value)
@@ -647,7 +647,7 @@ class JSONAny: Codable {
             throw encodingError(forValue: value, codingPath: container.codingPath)
         }
     }
-
+    
     public required init(from decoder: Decoder) throws {
         if var arrayContainer = try? decoder.unkeyedContainer() {
             self.value = try JSONAny.decodeArray(from: &arrayContainer)
@@ -658,7 +658,7 @@ class JSONAny: Codable {
             self.value = try JSONAny.decode(from: container)
         }
     }
-
+    
     public func encode(to encoder: Encoder) throws {
         if let arr = self.value as? [Any] {
             var container = encoder.unkeyedContainer()

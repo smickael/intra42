@@ -12,7 +12,7 @@ let APIClient = API()
 @main
 struct intra42App: App {
     @StateObject var api = APIClient
-//    @State private var accessToken: String? = nil
+    //    @State private var accessToken: String? = nil
     
     var body: some Scene {
         WindowGroup {

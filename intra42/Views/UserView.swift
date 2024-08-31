@@ -25,16 +25,16 @@ struct UserView: View {
     @State private var selectedCursusID: Int = 0
     
     var selectedCursusName: String {
-            model.user?.cursusUsers.first(where: { $0.cursus.id == selectedCursusID })?.cursus.name ?? "Unknown"
-        }
+        model.user?.cursusUsers.first(where: { $0.cursus.id == selectedCursusID })?.cursus.name ?? "Unknown"
+    }
     
     var selectedCursusSkills: [Skill] {
-           guard let user = model.user,
-                 let selectedCursusUser = user.cursusUsers.first(where: { $0.cursus.id == selectedCursusID }) else {
-               return []
-           }
-           return selectedCursusUser.skills
-       }
+        guard let user = model.user,
+              let selectedCursusUser = user.cursusUsers.first(where: { $0.cursus.id == selectedCursusID }) else {
+            return []
+        }
+        return selectedCursusUser.skills
+    }
     
     var body: some View {
         VStack {

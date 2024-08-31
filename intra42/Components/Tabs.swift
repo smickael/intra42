@@ -51,9 +51,9 @@ struct Tabs: View {
 
 #Preview {
     Tabs(options: ["Tab 1", "Tab 2", "Tab 3"],
-                     optionsContents: [
-                        AnyView(Text("Content of Tab 1")),
-                        AnyView(Text("Content of Tab 2")),
-                        AnyView(Text("Content of Tab 3"))
-                     ])
+         optionsContents: [
+            AnyView(Text("Content of Tab 1")),
+            AnyView(Text("Content of Tab 2")),
+            AnyView(Text("Content of Tab 3"))
+         ])
 }
