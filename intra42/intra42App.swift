@@ -11,11 +11,12 @@ let APIClient = API()
 
 @main
 struct intra42App: App {
-    let authenticated = false
+    @StateObject var api = APIClient
+//    @State private var accessToken: String? = nil
     
     var body: some Scene {
         WindowGroup {
-            if authenticated {
+            if let _ = api.auth {
                 TabView {
                     UsersView(model: .init())
                         .tabItem {
@@ -27,12 +28,12 @@ struct intra42App: App {
                         }
                     OffersView(model: .init())
                         .tabItem {
-                            Label("Companies", systemImage:
-                                    "case.fill")
+                            Label("Companies", systemImage: "case.fill")
                         }
-                }
+                }.environmentObject(api)
             } else {
                 LoginView()
+                    .environmentObject(api)
             }
         }
     }

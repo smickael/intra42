@@ -34,7 +34,6 @@
 		CACA93372BB3423A0075EEAE /* UserRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACA93362BB3423A0075EEAE /* UserRow.swift */; };
 		CACA93392BB351350075EEAE /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACA93382BB351340075EEAE /* UserView.swift */; };
 		CACA933B2BB478A20075EEAE /* ProfileUserHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACA933A2BB478A20075EEAE /* ProfileUserHeader.swift */; };
-		CACA933D2BB5B1350075EEAE /* SchoolMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACA933C2BB5B1350075EEAE /* SchoolMap.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +59,9 @@
 		CA615F212C305BA0006F798F /* Campus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Campus.swift; sourceTree = "<group>"; };
 		CA615F232C306105006F798F /* CountryFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryFlag.swift; sourceTree = "<group>"; };
 		CA615F252C3076B7006F798F /* SkillsChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillsChart.swift; sourceTree = "<group>"; };
+		CA6F27962C7F5127002B07A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		CA6F27972C7F7647002B07A9 /* intra42.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = intra42.entitlements; sourceTree = "<group>"; };
+		CA6F27982C7F8E33002B07A9 /* .env.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = .env.xcconfig; sourceTree = "<group>"; };
 		CA9B23C52C7C8DF800FBF9B8 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CA9B23C72C7C913B00FBF9B8 /* SFSafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSafariView.swift; sourceTree = "<group>"; };
 		CAA2FF522BB86CF400DD9A65 /* ProjectRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectRow.swift; sourceTree = "<group>"; };
@@ -85,7 +87,6 @@
 		CACA93362BB3423A0075EEAE /* UserRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRow.swift; sourceTree = "<group>"; };
 		CACA93382BB351340075EEAE /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		CACA933A2BB478A20075EEAE /* ProfileUserHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserHeader.swift; sourceTree = "<group>"; };
-		CACA933C2BB5B1350075EEAE /* SchoolMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolMap.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +117,7 @@
 		CAC718A72B7EBE330072F500 = {
 			isa = PBXGroup;
 			children = (
+				CA6F27982C7F8E33002B07A9 /* .env.xcconfig */,
 				CAC718B22B7EBE330072F500 /* intra42 */,
 				CAC718C32B7EBE360072F500 /* intra42Tests */,
 				CAC718CD2B7EBE360072F500 /* intra42UITests */,
@@ -136,6 +138,8 @@
 		CAC718B22B7EBE330072F500 /* intra42 */ = {
 			isa = PBXGroup;
 			children = (
+				CA6F27972C7F7647002B07A9 /* intra42.entitlements */,
+				CA6F27962C7F5127002B07A9 /* Info.plist */,
 				CACA93352BB342240075EEAE /* Components */,
 				CAC718E02B7EE3140072F500 /* Views */,
 				CAC718DD2B7ED92D0072F500 /* Model */,
@@ -202,7 +206,6 @@
 			children = (
 				CACA93362BB3423A0075EEAE /* UserRow.swift */,
 				CACA933A2BB478A20075EEAE /* ProfileUserHeader.swift */,
-				CACA933C2BB5B1350075EEAE /* SchoolMap.swift */,
 				CAA2FF522BB86CF400DD9A65 /* ProjectRow.swift */,
 				CAB81A412BBD95CC00AFA0C2 /* Tabs.swift */,
 				CAB81A432BBEEB5F00AFA0C2 /* UserProjectsList.swift */,
@@ -345,7 +348,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA615F262C3076B7006F798F /* SkillsChart.swift in Sources */,
-				CACA933D2BB5B1350075EEAE /* SchoolMap.swift in Sources */,
 				CAC718B62B7EBE330072F500 /* UsersView.swift in Sources */,
 				CAA372DA2C3451BF007E28A5 /* Offer.swift in Sources */,
 				CAB81A442BBEEB5F00AFA0C2 /* UserProjectsList.swift in Sources */,
@@ -405,6 +407,7 @@
 /* Begin XCBuildConfiguration section */
 		CAC718D22B7EBE360072F500 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA6F27982C7F8E33002B07A9 /* .env.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -468,6 +471,7 @@
 		};
 		CAC718D32B7EBE360072F500 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA6F27982C7F8E33002B07A9 /* .env.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -524,15 +528,18 @@
 		};
 		CAC718D52B7EBE360072F500 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA6F27982C7F8E33002B07A9 /* .env.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = intra42/intra42.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"intra42/Preview Content\"";
 				DEVELOPMENT_TEAM = VA3E8GANR3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = intra42/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -553,15 +560,18 @@
 		};
 		CAC718D62B7EBE360072F500 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA6F27982C7F8E33002B07A9 /* .env.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = intra42/intra42.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"intra42/Preview Content\"";
 				DEVELOPMENT_TEAM = VA3E8GANR3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = intra42/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

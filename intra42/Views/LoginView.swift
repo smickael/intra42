@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     @State var showURL = false
+    @EnvironmentObject var api: API
     
     var body: some View {
         VStack {
@@ -28,7 +29,7 @@ struct LoginView: View {
             .tint(.black)
         }
         .sheet(isPresented: $showURL) {
-            SFSafariView(url: .init(string: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-8f0aa2a7726a169bbd4b24d2c0761d0419f8b364b0599730712422e2c4aaf9b4&redirect_uri=https%3A%2F%2Fexample.com&response_type=code")!)
+            SFSafariView(url: api.authorizeURL())
         }
     }
 }
@@ -36,3 +37,6 @@ struct LoginView: View {
 #Preview {
     LoginView()
 }
+
+
+

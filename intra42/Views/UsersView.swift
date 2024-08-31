@@ -18,6 +18,7 @@ enum ContentData<T> {
     var searchText: String = ""
     
     func load() async {
+        data = .loading
         let trimmedSearchText = searchText.trimmingCharacters(in: .whitespaces).lowercased(with: .autoupdatingCurrent)
         
         if trimmedSearchText.isEmpty {
@@ -58,30 +59,41 @@ struct UsersView: View {
         NavigationSplitView {
             Group {
                 switch model.data {
-                case .loading:
-                    Spinner()
-                case .success(let users):
-                    if users.isEmpty && model.searchText.isEmpty {
-                        logoView()
-                    } else {
-                        List(users) { user in
-                            NavigationLink {
-                                UserView(model: .init(), id: user.id)
-                            } label: {
-                                UserRow(id: user.id, usualFullName: user.usualFullName, login: user.login, imageURL: user.image?.link)
+                    case .loading:
+                        Spinner()
+                    case .success(let users):
+                        if users.isEmpty &&
+                            !model.searchText.isEmpty {
+                            Group {
+                                Text("User not found")
+                                    .font(.headline)
+                                Text("Maybe you thought about your imaginary friend.. 🤔")
+                                    .font(.subheadline)
+                                    .monospaced()
+                                    .multilineTextAlignment(.center)
+                            }
+                            .padding()
+                        } else if users.isEmpty && model.searchText.isEmpty {
+                            logoView()
+                        } else {
+                            List(users) { user in
+                                NavigationLink {
+                                    UserView(model: .init(), id: user.id)
+                                } label: {
+                                    UserRow(id: user.id, usualFullName: user.usualFullName, login: user.login, imageURL: user.image?.link)
+                                }
                             }
                         }
-                    }
-                case .error( _):
-                    Group {
-                        Text("You're too fast for me!")
-                            .font(.headline)
-                        Text("By default, this app has limited\n to 2 requests/second")
-                            .font(.subheadline)
-                            .monospaced()
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding()
+                    case .error( _):
+                        Group {
+                            Text("You're too fast for me!")
+                                .font(.headline)
+                            Text("By default, this app has limited\n to 2 requests/second")
+                                .font(.subheadline)
+                                .monospaced()
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding()
                 }
             }.navigationTitle("Users")
         } detail: {

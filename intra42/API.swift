@@ -6,11 +6,26 @@
 //
 
 import Foundation
+import Security
 
-import Foundation
 
-class API {
-    private struct Auth {
+class API: ObservableObject {
+    init() {
+        self.auth = nil
+        self.client_id = Bundle.main.object(forInfoDictionaryKey: "CLIENT_ID") as! String
+        self.client_secret = Bundle.main.object(forInfoDictionaryKey: "CLIENT_SECRET") as! String
+        self.redirect_uri = "https://example.com"
+        
+        Task {
+            try await self.getToken()
+        }
+    }
+    
+    private let client_id: String
+    private let client_secret: String
+    private let redirect_uri: String
+    
+    struct Auth {
         let token: String
         let expiration: Date
     }
@@ -20,42 +35,169 @@ class API {
         let error: String
     }
     
-    private var auth: Auth? = nil
-    private let baseURL = URL(string: "https://api.intra.42.fr")!
-    private typealias Token = String
+    enum AuthenticationError: Error {
+        case tokenExpired
+        case dataStorage
+        case keychain
+        case noRefreshToken
+        case deleteRefreshToken
+    }
     
+    struct AuthCodeTokenResponse: Decodable {
+        let access_token: String
+        let expires_in: Int
+        let token_type: String
+        let refresh_token: String
+        let scope: String
+        let created_at: Date
+        let secret_valid_until: Date
+    }
+    
+    struct AuthData: Codable {
+        let refresh_token: String
+        let scope: String
+        let created_at: Date
+        let secret_valid_until: Date
+    }
+    
+    @Published var auth: Auth? = nil
+    
+    private let baseURL = URL(string: "https://api.intra.42.fr")!
+    typealias Token = String
     
     let session = URLSession(configuration: .ephemeral)
+    
+    enum GrantType {
+        case authorizationCode(_ code: String)
+        case refreshToken(_ token: String)
+    }
+    
+    @discardableResult
+    func authenticate(_ grantType: GrantType) async throws -> Token {
+        var components = URLComponents(string: "/oauth/token")!
+        
+        components.queryItems = [
+            .init(name: "client_id", value: client_id),
+            .init(name: "client_secret", value: client_secret),
+            .init(name: "redirect_uri", value: redirect_uri),
+            
+        ]
+        
+        switch grantType {
+            case .authorizationCode(let code):
+                components.queryItems?.append(contentsOf: [.init(name: "grant_type", value: "authorization_code"), .init(name: "code", value: code)])
+            case .refreshToken(let token):
+                components.queryItems?.append(contentsOf: [.init(name: "grant_type", value: "refresh_token"), .init(name: "refresh_token", value: token)])
+        }
+        
+        let tokenURL = components.url(relativeTo: baseURL)!
+        
+        var request = URLRequest(url: tokenURL)
+        request.httpMethod = "POST"
+        
+        let (data, _) = try await session.data(for: request)
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
+        
+        let payload = try decoder.decode(AuthCodeTokenResponse.self, from: data)
+        
+        try storeAuthData(response: payload)
+        
+        DispatchQueue.main.async {
+            self.auth = Auth(token: payload.access_token, expiration: .init(timeIntervalSinceNow: TimeInterval(payload.expires_in)))
+        }
+        return payload.access_token
+    }
+    
+    // MARK: - Security
+    func authorizeURL() -> URL {
+        var components = URLComponents(string: "/oauth/authorize")!
+        
+        components.queryItems = [
+            .init(name: "client_id", value: client_id),
+            .init(name: "response_type", value: "code"),
+            .init(name: "redirect_uri", value: redirect_uri),
+            
+        ]
+        
+        return components.url(relativeTo: baseURL)!
+    }
+    
+    func storeAuthData(response: AuthCodeTokenResponse) throws {
+        let authData = AuthData(refresh_token: response.refresh_token, scope: response.scope, created_at: response.created_at, secret_valid_until: response.secret_valid_until)
+        let data = try JSONEncoder().encode(authData)
+        
+        let deleteQuery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: "refresh_token",
+        ]
+        
+        let deleteQueryStatus = SecItemDelete(deleteQuery as CFDictionary)
+        guard deleteQueryStatus == errSecSuccess || deleteQueryStatus == errSecItemNotFound else {
+            print(deleteQueryStatus)
+            throw AuthenticationError.deleteRefreshToken
+        }
+        
+        let addquery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: "refresh_token",
+            kSecValueData as String: data,
+            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlocked
+        ]
+        
+        let status = SecItemAdd(addquery as CFDictionary, nil)
+        guard status == errSecSuccess else {
+            print(status)
+            throw AuthenticationError.keychain
+        }
+    }
+    
+    
     private func getToken() async throws -> Token {
-        if let auth, auth.expiration.timeIntervalSinceNow > 0 {
+        if let auth, auth.expiration.timeIntervalSinceNow > 0 /* put 7100s if you want to see access_token expiring in one minutes thirty seconds */ {
             print("token reuse")
             return auth.token
         }
         
-        print("new token")
+        let getquery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: "refresh_token",
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
         
-        struct AuthTokenResponse : Decodable {
-            let access_token : String
-            let expires_in: Int
+        var item: CFTypeRef?
+        let status = SecItemCopyMatching(getquery as CFDictionary, &item)
+        guard status == errSecSuccess,
+              let data = item as? Data
+        else {
+            DispatchQueue.main.async {
+                self.auth = nil
+            }
+            throw AuthenticationError.noRefreshToken
         }
         
-        let tokenURL = URL(string: "/oauth/token?grant_type=client_credentials&client_id=u-s4t2ud-8f0aa2a7726a169bbd4b24d2c0761d0419f8b364b0599730712422e2c4aaf9b4&client_secret=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", relativeTo: baseURL)!
+        print("Refresh Token found")
         
-        
-        var request = URLRequest(url: tokenURL)
-        
-        request.httpMethod = "POST"
-        request.httpBody = "{}".data(using: .utf8)
-        
-        let (data, _) = try await session.data(for: request)
-        
-        let payload = try JSONDecoder().decode(AuthTokenResponse.self, from: data)
-        
-        self.auth = .init(token: payload.access_token, expiration: .init(timeIntervalSinceNow: TimeInterval(payload.expires_in)))
-        return payload.access_token
-        
+        do {
+            let authData = try JSONDecoder().decode(AuthData.self, from: data)
+            guard authData.secret_valid_until > Date.now else { throw AuthenticationError.tokenExpired }
+            
+            let token = try await authenticate(.refreshToken(authData.refresh_token))
+            
+            print("New Access Token created")
+            
+            return token
+        } catch {
+            DispatchQueue.main.async {
+                self.auth = nil
+            }
+            throw error
+        }
     }
     
+    // MARK: - API
     func users(search: String?) async throws -> [User] {
         var components = URLComponents(string: "v2/users")!
         
@@ -94,20 +236,6 @@ class API {
         let user = try JSONDecoder().decode(UserDetails.self, from: userData)
         
         return user
-    }
-    
-    func searchUser(username: String) async throws -> UserDetails {
-        let baseURL = URL(string: "https://api.intra.42.fr")!
-        
-        let userURL = URL(string: "/v2/users/?range%5Blogin%5D=smi,smiz", relativeTo: baseURL)!
-        
-        var userSearchRequest = URLRequest(url: userURL)
-        userSearchRequest.setValue("Bearer \(try await getToken())", forHTTPHeaderField: "Authorization")
-        
-        let (userSearchData, _) = try await session.data(for: userSearchRequest)
-        let userSearch = try JSONDecoder().decode(UserDetails.self, from: userSearchData)
-        
-        return userSearch
     }
     
     func projects() async throws -> [ProjectDetails] {

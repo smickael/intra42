@@ -7,36 +7,6 @@
 
 import Foundation
 
-//// MARK: - Campus
-//struct Campus: Codable {
-//    let id: Int
-//    let name, timeZone: String
-//    let language: Language
-//    let usersCount: Int
-//    let vogsphereID: Int?
-//    let country, address, zip, city: String
-//    let website: String
-//    let facebook, twitter: String
-//    let active, campusPublic: Bool
-//    let emailExtension: String?
-//    let defaultHiddenPhone: Bool
-//
-//    enum CodingKeys: String, CodingKey {
-//        case id, name
-//        case timeZone = "time_zone"
-//        case language
-//        case usersCount = "users_count"
-//        case vogsphereID = "vogsphere_id"
-//        case country, address, zip, city, website, facebook, twitter, active
-//        case campusPublic = "public"
-//        case emailExtension = "email_extension"
-//        case defaultHiddenPhone = "default_hidden_phone"
-//    }
-//}
-//
-//typealias Campuses = [Campus]
-
-
 let countriesISO: [String: String] = [
     "Angola": "AO",
     "Armenia": "AM",

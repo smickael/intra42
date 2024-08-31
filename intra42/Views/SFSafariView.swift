@@ -24,7 +24,29 @@ struct SFSafariView: UIViewControllerRepresentable {
 }
 
 fileprivate class SFDelegate: NSObject, SFSafariViewControllerDelegate {
-    func safariViewController(_ controller: SFSafariViewController, initialLoadDidRedirectTo URL: URL) {
-        print(URL)
+    func safariViewController(_ controller: SFSafariViewController, initialLoadDidRedirectTo url: URL) {
+        print(url)
+        guard url.host() == "example.com",
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let param = components.queryItems?.first(where: { item in
+                  item.name == "code"
+              })
+        else {
+            return
+        }
+        
+        print(param)
+        
+        if let code = param.value, !code.isEmpty {
+            Task {
+                do {
+                    try await APIClient.authenticate(.authorizationCode(code))
+                    print("Authenticated successfully")
+                }
+                catch {
+                    print("Failed to authenticate \(error)")
+                }
+            }
+        }
     }
 }
