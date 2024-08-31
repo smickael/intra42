@@ -7,12 +7,14 @@
 
 import SwiftUI
 
+// Enum of the different states of fetching datas
 enum ContentData<T> {
     case success(_ data: T)
     case loading
     case error(_ error: Error)
 }
 
+// Model class for managing the state and datas of UsersView
 @Observable class UsersModel {
     var data: ContentData<[User]> = .loading
     var searchText: String = ""
@@ -36,6 +38,7 @@ enum ContentData<T> {
     }
 }
 
+// View that displays the list of users and handles user search
 struct UsersView: View {
     @State var model: UsersModel
     

@@ -8,8 +8,11 @@
 import Foundation
 import Security
 
-
+// MARK: - API Class
 class API: ObservableObject {
+    
+    // MARK: - Init
+    // Initialize the API with credentials to get a token
     init() {
         self.auth = nil
         self.client_id = Bundle.main.object(forInfoDictionaryKey: "CLIENT_ID") as! String
@@ -21,10 +24,13 @@ class API: ObservableObject {
         }
     }
     
+    // MARK: - Global variables
+    // Client informations and redirect URL for OAuth
     private let client_id: String
     private let client_secret: String
     private let redirect_uri: String
     
+    // MARK: - Structures
     struct Auth {
         let token: String
         let expiration: Date
@@ -65,6 +71,7 @@ class API: ObservableObject {
     private let baseURL = URL(string: "https://api.intra.42.fr")!
     typealias Token = String
     
+    // Session with ephemeral storage parameter for better security
     let session = URLSession(configuration: .ephemeral)
     
     enum GrantType {
@@ -72,10 +79,13 @@ class API: ObservableObject {
         case refreshToken(_ token: String)
     }
     
+    // MARK: - Authenticate
+    // Function to handle authentication regarding the GrantType (authorizationCode or refreshToken)
     @discardableResult
     func authenticate(_ grantType: GrantType) async throws -> Token {
         var components = URLComponents(string: "/oauth/token")!
         
+        // Common query items for both authorization code and refresh token requests
         components.queryItems = [
             .init(name: "client_id", value: client_id),
             .init(name: "client_secret", value: client_secret),
@@ -83,6 +93,7 @@ class API: ObservableObject {
             
         ]
         
+        // Add specific query items based on the grant type
         switch grantType {
             case .authorizationCode(let code):
                 components.queryItems?.append(contentsOf: [.init(name: "grant_type", value: "authorization_code"), .init(name: "code", value: code)])
@@ -102,8 +113,10 @@ class API: ObservableObject {
         
         let payload = try decoder.decode(AuthCodeTokenResponse.self, from: data)
         
+        // Store the refresh token securely
         try storeAuthData(response: payload)
         
+        // Update the auth property with the new token
         DispatchQueue.main.async {
             self.auth = Auth(token: payload.access_token, expiration: .init(timeIntervalSinceNow: TimeInterval(payload.expires_in)))
         }
@@ -111,6 +124,7 @@ class API: ObservableObject {
     }
     
     // MARK: - Security
+    // Function for constructing the OAuth authorization URL
     func authorizeURL() -> URL {
         var components = URLComponents(string: "/oauth/authorize")!
         
@@ -124,10 +138,13 @@ class API: ObservableObject {
         return components.url(relativeTo: baseURL)!
     }
     
+    // MARK: - Store to Keychain
+    // Function to store auth data in the Keychain
     func storeAuthData(response: AuthCodeTokenResponse) throws {
         let authData = AuthData(refresh_token: response.refresh_token, scope: response.scope, created_at: response.created_at, secret_valid_until: response.secret_valid_until)
         let data = try JSONEncoder().encode(authData)
         
+        // Remove old refresh token from Keychain if exists
         let deleteQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: "refresh_token",
@@ -139,6 +156,7 @@ class API: ObservableObject {
             throw AuthenticationError.deleteRefreshToken
         }
         
+        // Add the new refresh token to Keychain
         let addquery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: "refresh_token",
@@ -153,13 +171,16 @@ class API: ObservableObject {
         }
     }
     
-    
+    // MARK: - Get Token
+    // Function to get the access token, using refresh token if needed
     private func getToken() async throws -> Token {
+        // If the current token is still valid, use this token
         if let auth, auth.expiration.timeIntervalSinceNow > 0 /* put 7100s if you want to see access_token expiring in one minutes thirty seconds */ {
             print("token reuse")
             return auth.token
         }
         
+        // Else get refresh token from Keychain
         let getquery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: "refresh_token",
@@ -180,6 +201,7 @@ class API: ObservableObject {
         
         print("Refresh Token found")
         
+        // Try to use the refresh token to get a new access token
         do {
             let authData = try JSONDecoder().decode(AuthData.self, from: data)
             guard authData.secret_valid_until > Date.now else { throw AuthenticationError.tokenExpired }
@@ -197,7 +219,8 @@ class API: ObservableObject {
         }
     }
     
-    // MARK: - API
+    // MARK: - Fetch users
+    // Function to fetch users from the API
     func users(search: String?) async throws -> [User] {
         var components = URLComponents(string: "v2/users")!
         
@@ -225,6 +248,8 @@ class API: ObservableObject {
         return users
     }
     
+    // MARK: - Fetch user data
+    // Function to fetch a single user's datas from the API
     func user(id: UserDetails.ID) async throws -> UserDetails {
         let userURL = URL(string: "/v2/users/\(id)", relativeTo: baseURL)!
         
@@ -238,6 +263,8 @@ class API: ObservableObject {
         return user
     }
     
+    // MARK: - Fetch projects
+    // Function to fetch projects from the API
     func projects() async throws -> [ProjectDetails] {
         
         let projectsURL = URL(string: "/v2/projects?page%5Bsize%5D=200", relativeTo: baseURL)!
@@ -252,6 +279,8 @@ class API: ObservableObject {
         return projects
     }
     
+    // MARK: - Fetch offers
+    // Function to fetch companies offers from the API
     func offers() async throws -> [Offer] {
         
         let offersURL = URL(string: "/v2/offers", relativeTo: baseURL)!
@@ -266,6 +295,8 @@ class API: ObservableObject {
         return offers
     }
     
+    // MARK: - Fetch offer datas
+    // Function to fetch a single offer's datas from the API
     func offer(id: Offer.ID) async throws -> Offer {
         let offerURL = URL(string: "/v2/offers/\(id)", relativeTo: baseURL)!
         

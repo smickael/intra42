@@ -11,6 +11,8 @@ struct LoginView: View {
     @State var showURL = false
     @EnvironmentObject var api: API
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         VStack {
             Text("Login to")
@@ -26,7 +28,9 @@ struct LoginView: View {
             .labelStyle(.titleAndIcon)
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
-            .tint(.black)
+            .background(colorScheme == .dark ? Color.white : Color.black)
+            .tint(colorScheme == .dark ? Color.black : Color.white)
+            .clipShape(.capsule)
         }
         .sheet(isPresented: $showURL) {
             SFSafariView(url: api.authorizeURL())
